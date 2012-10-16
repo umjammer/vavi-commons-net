@@ -55,7 +55,6 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     /** */
-    @SuppressWarnings("deprecation")
     public boolean isRequestedSessionIdFromUrl() {
         return false;
     }
@@ -293,7 +292,7 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     private ServletInputStream servletInputStream;
 
     /** 
-     * @return 常に同じインスタンスが返ります。 
+     * @return 蟶ｸ縺ｫ蜷後§繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ縺瑚ｿ斐ｊ縺ｾ縺吶� 
      */
     public ServletInputStream getInputStream() throws IOException {
         if (servletInputStream == null) {
@@ -340,7 +339,6 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     /** */
-    @SuppressWarnings("deprecation")
     public String getRealPath(String path) {
         return null;
     }

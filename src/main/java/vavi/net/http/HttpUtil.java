@@ -349,7 +349,7 @@ System.err.println("--------");
      */
     @SuppressWarnings("unchecked")
     public static void copy(HttpServletRequest request, HttpContext context) {
-        Enumeration e = request.getHeaderNames();
+        Enumeration<?> e = request.getHeaderNames();
         while (e.hasMoreElements()) {
             String name = (String) e.nextElement();
             String value = request.getHeader(name);
@@ -364,7 +364,7 @@ System.err.println("--------");
             ioe.printStackTrace();
         }
         context.setMethod(request.getMethod());
-        context.setProtocol(Protocol.Factory.getInstanceByName(request.getProtocol())); // TODO http11 �Ƃ��́H
+        context.setProtocol(Protocol.Factory.getInstanceByName(request.getProtocol())); // TODO http11 とかは？
         context.setRequestURI(request.getRequestURI());
     }
 

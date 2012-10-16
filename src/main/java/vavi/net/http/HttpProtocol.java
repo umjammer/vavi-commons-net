@@ -39,7 +39,7 @@ public class HttpProtocol implements Protocol {
         return "HTTP";
     }
 
-    /* TODO ‚à‚Á‚ÆŒµ–§‚É "-" ŠÜ‚ß‚Ä‚é‚æ */
+    /* TODO ã‚‚ã£ã¨å³å¯†ã« "-" å«ã‚ã¦ã‚‹ã‚ˆ */
     public boolean matchesRequestLine(String line) {
         return line.matches("([\\w-]+)\\s+(\\S+)\\s+(HTTP\\/\\d\\.\\d)\\s*");
     }

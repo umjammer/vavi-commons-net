@@ -26,20 +26,20 @@ import vavi.util.Debug;
  */
 public class InetServer {
 
-    /** ƒT[ƒo[ƒ\ƒPƒbƒg */
+    /** ã‚µãƒ¼ãƒãƒ¼ã‚½ã‚±ãƒƒãƒˆ */
     private ServerSocket serverSocket;
-    /** ƒT[ƒo[ */
+    /** ã‚µãƒ¼ãƒãƒ¼ */
     private final ExecutorService server;
-    /** ƒXƒŒƒbƒhƒv[ƒ‹ */
+    /** ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ¼ãƒ« */
     private final ExecutorService pool;
     /** */
     private int port;
 
     /**
-     * w’è‚µ‚½ƒ|[ƒg”Ô†‚ÅƒT[ƒo[‚ğ‹N“®‚µ‚Ü‚·B
-     * ÀÛs‚¢‚½‚¢‚±‚Æ‚Í {@link #setSocketHandlerFactory(SocketHandlerFactory)}
-     * ‚ğg—p‚µ‚Ä“o˜^‚µ‚Ä‚­‚¾‚³‚¢B
-     * @param port ƒT[ƒo[‚Ìƒ|[ƒg”Ô†
+     * æŒ‡å®šã—ãŸãƒãƒ¼ãƒˆç•ªå·ã§ã‚µãƒ¼ãƒãƒ¼ã‚’èµ·å‹•ã—ã¾ã™ã€‚
+     * å®Ÿéš›è¡Œã„ãŸã„ã“ã¨ã¯ {@link #setSocketHandlerFactory(SocketHandlerFactory)}
+     * ã‚’ä½¿ç”¨ã—ã¦ç™»éŒ²ã—ã¦ãã ã•ã„ã€‚
+     * @param port ã‚µãƒ¼ãƒãƒ¼ã®ãƒãƒ¼ãƒˆç•ªå·
      */
     public InetServer(int port) {
         this.port = port;
@@ -47,15 +47,15 @@ public class InetServer {
         server = Executors.newSingleThreadExecutor();
     }
 
-    /** Ú‘±‚ğ‘Ò‚ÂƒXƒŒƒbƒh—p‚Ìƒ^ƒXƒN */
+    /** æ¥ç¶šã‚’å¾…ã¤ã‚¹ãƒ¬ãƒƒãƒ‰ç”¨ã®ã‚¿ã‚¹ã‚¯ */
     private Runnable serverTask = new Runnable() {
-        /** Ú‘±‚ğ‘Ò‚¿ƒCƒxƒ“ƒg‚ğƒŠƒXƒi‚É‘Î‚µ‚Ä”­s‚µ‚Ü‚·B */
+        /** æ¥ç¶šã‚’å¾…ã¡ã‚¤ãƒ™ãƒ³ãƒˆã‚’ãƒªã‚¹ãƒŠã«å¯¾ã—ã¦ç™ºè¡Œã—ã¾ã™ã€‚ */
         public void run() {
             while (true) {
                 try {
                     acceptingList.add(pool.submit(socketHandlerFactory.getSocketHandler(serverSocket.accept())));
                 } catch (Throwable t) {
-                    // Throwable ‚ÅI—¹‚µ‚Ü‚¹‚ñ
+                    // Throwable ã§çµ‚äº†ã—ã¾ã›ã‚“
 Debug.println(t);
                     try { Thread.sleep(100); } catch (InterruptedException e) {}
                 }
@@ -64,7 +64,7 @@ Debug.println(t);
     };
 
     /**
-     * Ú‘±‚²‚Æ‚É‹N“®‚·‚éƒnƒ“ƒhƒ‰ƒNƒ‰ƒX‚ğì¬‚·‚éƒtƒ@ƒNƒgƒŠƒNƒ‰ƒX‚Å‚·B
+     * æ¥ç¶šã”ã¨ã«èµ·å‹•ã™ã‚‹ãƒãƒ³ãƒ‰ãƒ©ã‚¯ãƒ©ã‚¹ã‚’ä½œæˆã™ã‚‹ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚¯ãƒ©ã‚¹ã§ã™ã€‚
      * @see #setSocketHandlerFactory(SocketHandlerFactory)
      */
     private SocketHandlerFactory socketHandlerFactory;
@@ -83,7 +83,7 @@ Debug.println(t);
     private List<Future<?>> acceptingList = new ArrayList<Future<?>>();
 
     /**
-     * ƒT[ƒo[ƒXƒŒƒbƒh‚ğŠJn‚µ‚Ü‚·B
+     * ã‚µãƒ¼ãƒãƒ¼ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’é–‹å§‹ã—ã¾ã™ã€‚
      */
     public void start() throws IOException {
         serverSocket = new ServerSocket(port);
@@ -92,7 +92,7 @@ Debug.println(t);
     }
 
     /**
-     * ƒT[ƒo[ƒXƒŒƒbƒh‚ğ’â~‚µ‚Ü‚·B
+     * ã‚µãƒ¼ãƒãƒ¼ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’åœæ­¢ã—ã¾ã™ã€‚
      */
     public void stop() throws IOException {
         try {

@@ -58,7 +58,6 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
     }
 
     /** */
-    @SuppressWarnings("deprecation")
     public void setStatus(int status, String message) {
     }
 
@@ -108,7 +107,6 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
     }
 
     /** */
-    @SuppressWarnings("deprecation")
     public String encodeRedirectUrl(String url) {
         return url;
     }
@@ -123,7 +121,6 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
     }
 
     /** */
-    @SuppressWarnings("deprecation")
     public String encodeUrl(String url) {
         return url;
     }
@@ -152,7 +149,7 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
     /** */
     private boolean nowFlushing = false;
 
-    /** TODO buffer ‚ğg—p‚µ‚È‚¢ê‡ */
+    /** TODO buffer ã‚’ä½¿ç”¨ã—ãªã„å ´åˆ */
     public void flushBuffer() throws IOException {
 //new Exception("*** DUMMY ***").printStackTrace();
         if (nowFlushing) {
@@ -291,7 +288,7 @@ Debug.println("name: " + name);
     private ServletOutputStream servletOutputStream;
 
     /**
-     * @return í‚É“¯‚¶ƒCƒ“ƒXƒ^ƒ“ƒX‚ª•Ô‚è‚Ü‚·B 
+     * @return å¸¸ã«åŒã˜ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒè¿”ã‚Šã¾ã™ã€‚ 
      */
     public ServletOutputStream getOutputStream() throws IOException {
         if (usedWriter) {
@@ -307,8 +304,8 @@ Debug.println("name: " + name);
                         buffer.write(b);
                     }
                     public void flush() throws IOException {
-                        // TODO —vƒŠƒtƒ@ƒNƒ^
-                        // eƒCƒ“ƒXƒ^ƒ“ƒX‚ğg—p‚µ‚Ä‚é‚©‚ç‰˜‚­‚È‚Á‚Ä‚é
+                        // TODO è¦ãƒªãƒ•ã‚¡ã‚¯ã‚¿
+                        // è¦ªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½¿ç”¨ã—ã¦ã‚‹ã‹ã‚‰æ±šããªã£ã¦ã‚‹
                         flushBuffer();
                     }
                 };

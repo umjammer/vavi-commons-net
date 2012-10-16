@@ -89,7 +89,7 @@ public class HttpServer {
     /** run */
     private InetServer httpServer;
 
-    /** 実際のサーバータスク */
+    /** 螳滄圀縺ｮ繧ｵ繝ｼ繝舌�ｼ繧ｿ繧ｹ繧ｯ */
     private SocketHandlerFactory socketHandlerFactory = new SocketHandlerFactory() {
         public Runnable getSocketHandler(final Socket socket) {
 Debug.println("<<<< <<<< <<<< <<<< <<<< <<<< <<<< <<<< <<<< ACCEPT: " + socket.getRemoteSocketAddress() + ": " + socket.hashCode());
