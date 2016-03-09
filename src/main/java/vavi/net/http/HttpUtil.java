@@ -83,6 +83,7 @@ System.err.println("-------- " + is.available() + " bytes left");
      * @see HttpContext#setStatus(int)
      * @see HttpContext#setInputStream(InputStream)
      */
+    @SuppressWarnings("resource")
     public static void parseResponseHeader(InputStream is, HttpContext context) throws IOException {
         UtilInputStream reader = new UtilInputStream(is, defaultEncoding); 
 //Debug.println("available-1: " + is.available());
@@ -347,7 +348,6 @@ System.err.println("--------");
      * @param request source
      * @param context destination 
      */
-    @SuppressWarnings("unchecked")
     public static void copy(HttpServletRequest request, HttpContext context) {
         Enumeration<?> e = request.getHeaderNames();
         while (e.hasMoreElements()) {

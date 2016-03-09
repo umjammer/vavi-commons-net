@@ -80,7 +80,7 @@ public interface Protocol {
     /** */
     class Factory {
         /** */
-        private static List<String> classNames = new ArrayList<String>();
+        private static List<String> classNames = new ArrayList<>();
 
         /* TODO use properties file */
         static {
@@ -94,7 +94,7 @@ public interface Protocol {
                 try {
                     protocol = (Protocol) Class.forName(className).newInstance();
                 } catch (Exception e) {
-                    throw (RuntimeException) new IllegalStateException().initCause(e);
+                    throw new IllegalStateException(e);
                 }
                 if (protocol.matchesRequestLine(line)) {
                     return protocol;
@@ -111,7 +111,7 @@ public interface Protocol {
                 try {
                     protocol = (Protocol) Class.forName(className).newInstance();
                 } catch (Exception e) {
-                    throw (RuntimeException) new IllegalStateException().initCause(e);
+                    throw new IllegalStateException(e);
                 }
                 if (protocol.matchesResponseLine(line)) {
                     return protocol;
@@ -128,7 +128,7 @@ public interface Protocol {
                 try {
                     protocol = (Protocol) Class.forName(className).newInstance();
                 } catch (Exception e) {
-                    throw (RuntimeException) new IllegalStateException().initCause(e);
+                    throw new IllegalStateException(e);
                 }
                 if (protocol.getName().equals(name)) {
                     return protocol;

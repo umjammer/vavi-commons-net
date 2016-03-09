@@ -31,37 +31,33 @@ import vavi.util.Debug;
  * @version 12/12/02 first revision. <br>
  *          10/20/03 Improved the HTTP server using multithreading. <br>
  */
-public class HttpServer {
-
-    /** Constants */
-    public final static String NAME = "CyberHTTP";
+public class HttpServer extends InetServer {
 
     /** */
-    public final static String VERSION = "1.0";
+    private final static String NAME = "Vavi HTTP";
+
+    /** */
+    private final static String VERSION = "1.0.1";
 
     /** */
     public final static int DEFAULT_PORT = 80;
 
     /** */
     public static String getName() {
-        String osName = System.getProperty("os.name");
-        String osVer = System.getProperty("os.version");
-        return osName + "/" + osVer + " " + NAME + "/" + VERSION;
+        String name = System.getProperty("os.name");
+        String version = System.getProperty("os.version");
+        return name + "/" + version + " " + NAME + "/" + VERSION;
     }
 
     /** Constructor */
     public HttpServer(String addr, int port) throws IOException {
+        super(port);
         this.address = InetAddress.getByName(addr);
-        this.port = port;
-        this.httpServer = new InetServer(port);
-        httpServer.setSocketHandlerFactory(socketHandlerFactory);
+        setSocketHandlerFactory(socketHandlerFactory);
     }
 
     /** ServerSocket */
     private InetAddress address;
-
-    /** */
-    private int port;
 
     /** httpRequest */
     private EventListenerList httpRequestListenerList = new EventListenerList();
@@ -85,9 +81,6 @@ public class HttpServer {
             }
         }
     }
-
-    /** run */
-    private InetServer httpServer;
 
     /** 実際のサーバータスク */
     private SocketHandlerFactory socketHandlerFactory = new SocketHandlerFactory() {
@@ -150,16 +143,13 @@ Debug.println("==== ONE PROCESS DONE: " + socket.getRemoteSocketAddress());
 
     /** */
     public void start() throws IOException {
-        httpServer.start();
+        super.start();
 Debug.println("+++ HTTP server: address: " + address + ", port: " + port);
     }
 
     /** */
     public void stop() throws IOException {
-        httpServer.stop();
-
-        address = null;
-        port = 0;
+        super.stop();
     }
 }
 

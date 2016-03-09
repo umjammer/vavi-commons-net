@@ -140,7 +140,7 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
 
     /** */
     public Enumeration<?> getHeaderNames() {
-        Hashtable<String, String> hashtable = new Hashtable<String, String>();
+        Hashtable<String, String> hashtable = new Hashtable<>();
         hashtable.putAll(context.getHeaders());
         return hashtable.keys();
     }
@@ -154,7 +154,7 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
         if (cookieValue == null) {
             return null;
         }
-        List<Cookie> cookieList = new ArrayList<Cookie>();
+        List<Cookie> cookieList = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(cookieValue, "; ");
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
@@ -169,7 +169,8 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
             }
             cookieList.add(new Cookie(name, value));
         }
-        return cookieList.toArray(new Cookie[cookieList.size()]);
+        cookies = cookieList.toArray(new Cookie[cookieList.size()]);
+        return cookies;
     }
 
     /** TODO */
@@ -261,7 +262,7 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
 
     /** */
     public Enumeration<?> getAttributeNames() {
-        Hashtable<String, Object> hashtable = new Hashtable<String, Object>();
+        Hashtable<String, Object> hashtable = new Hashtable<>();
         hashtable.putAll(attributes);
         return hashtable.keys();
     }
@@ -273,7 +274,7 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
 
     /** */
     public Enumeration<?> getParameterNames() {
-        Hashtable<String, String[]> hashtable = new Hashtable<String, String[]>();
+        Hashtable<String, String[]> hashtable = new Hashtable<>();
         hashtable.putAll(context.getParameters());
         return hashtable.elements();
     }
@@ -320,7 +321,7 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     /** */
-    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private Map<String, Object> attributes = new HashMap<>();
 
     /** */
     public Object getAttribute(String name) {

@@ -20,10 +20,10 @@ import java.util.Map;
  */
 public class HttpContext {
     /** <name, value> name must be lower case! */
-    protected Map<String, String> headers = new HashMap<String, String>();
+    protected Map<String, String> headers = new HashMap<>();
     
     /** <name, value(s)> name is case insensitive */
-    protected Map<String, String[]> parameters = new HashMap<String, String[]>();
+    protected Map<String, String[]> parameters = new HashMap<>();
 
     /** HTTP status code */
     protected int status;

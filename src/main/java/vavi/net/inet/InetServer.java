@@ -33,7 +33,7 @@ public class InetServer {
     /** スレッドプール */
     private final ExecutorService pool;
     /** */
-    private int port;
+    protected int port;
 
     /**
      * 指定したポート番号でサーバーを起動します。
@@ -55,6 +55,9 @@ public class InetServer {
                 try {
                     acceptingList.add(pool.submit(socketHandlerFactory.getSocketHandler(serverSocket.accept())));
                 } catch (Throwable t) {
+                    if (!isRunning()) {
+                        break;
+                    }
                     // Throwable で終了しません
 Debug.println(t);
                     try { Thread.sleep(100); } catch (InterruptedException e) {}
@@ -80,7 +83,7 @@ Debug.println(t);
     private Future<?> serving;
 
     /** */
-    private List<Future<?>> acceptingList = new ArrayList<Future<?>>();
+    private List<Future<?>> acceptingList = new ArrayList<>();
 
     /**
      * サーバースレッドを開始します。
