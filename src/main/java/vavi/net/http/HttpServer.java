@@ -27,7 +27,7 @@ import vavi.util.Debug;
  * HTTPServer.
  *
  * @author Satoshi Konno
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 12/12/02 first revision. <br>
  *          10/20/03 Improved the HTTP server using multithreading. <br>
  */

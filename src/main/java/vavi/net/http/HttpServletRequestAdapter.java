@@ -30,8 +30,8 @@ import javax.servlet.http.HttpSession;
 
 /**
  * HttpServletRequestAdapter.
- * 
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ *
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 050221 nsano initial version <br>
  */
 public class HttpServletRequestAdapter implements HttpServletRequest {
@@ -292,8 +292,8 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     /** */
     private ServletInputStream servletInputStream;
 
-    /** 
-     * @return 常に同じインスタンスが返ります。 
+    /**
+     * @return 常に同じインスタンスが返ります。
      */
     public ServletInputStream getInputStream() throws IOException {
         if (servletInputStream == null) {

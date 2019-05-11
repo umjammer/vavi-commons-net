@@ -13,15 +13,15 @@ import java.util.Map;
 
 
 /**
- * HttpContext. 
+ * HttpContext.
  *
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 050731 nsano initial version <br>
  */
 public class HttpContext {
     /** <name, value> name must be lower case! */
     protected Map<String, String> headers = new HashMap<>();
-    
+
     /** <name, value(s)> name is case insensitive */
     protected Map<String, String[]> parameters = new HashMap<>();
 

@@ -26,9 +26,9 @@ import vavi.util.Debug;
 
 
 /**
- * HttpUtil. 
+ * HttpUtil.
  *
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 050914 nsano initial version <br>
  */
 public final class HttpUtil {
@@ -41,7 +41,7 @@ public final class HttpUtil {
     /**
      * (for server)
      * use {@link InputStream#available()}
-     * @param context request are copied into  
+     * @param context request are copied into
      * @see HttpContext#setMethod()
      * @see HttpContext#setRequestURI(String)
      * @see HttpContext#setProtocol(String)
@@ -51,7 +51,7 @@ public final class HttpUtil {
 System.err.println("-------- request: " + context.getRemoteHost() + ":" + context.getRemotePort() + " >> " + context.getLocalHost() + ":" + context.getLocalPort() + " (" + is.available() + " bytes available)");
 //Debug.println(Debug.getCallerMethod(2));
 //Debug.println("available-1: " + is.available());
-        UtilInputStream reader = new UtilInputStream(is); 
+        UtilInputStream reader = new UtilInputStream(is);
         String line = reader.readLine();
 System.err.println("request line: " + line);
         Protocol protocol = Protocol.Factory.getInstanceByRequestLine(line);
@@ -78,14 +78,14 @@ System.err.println("-------- " + is.available() + " bytes left");
     /**
      * (for client)
      * don't use {@link InputStream#available()}!
-     * @param context responses are copied into  
+     * @param context responses are copied into
      * @see HttpContext#setProtocol(String)
      * @see HttpContext#setStatus(int)
      * @see HttpContext#setInputStream(InputStream)
      */
     @SuppressWarnings("resource")
     public static void parseResponseHeader(InputStream is, HttpContext context) throws IOException {
-        UtilInputStream reader = new UtilInputStream(is, defaultEncoding); 
+        UtilInputStream reader = new UtilInputStream(is, defaultEncoding);
 //Debug.println("available-1: " + is.available());
         String line = reader.readLine();
         if (line == null) {
@@ -106,14 +106,14 @@ System.err.println("--------");
     /**
      * Parses request then set {@link HttpContext#headers}.
      * (for server)
-     * @param context responses are copied into  
+     * @param context responses are copied into
      */
     private static void parseRequestHeaders(UtilInputStream reader, HttpContext context) throws IOException {
         while (reader.available() > 0) {
             String line = reader.readLine();
             if (line == null || line.length() == 0) {
 //Debug.println("may be end of header: " + line);
-                break; 
+                break;
             }
             String[] pair = parseHeader(line);
             context.setHeader(pair[0], pair[1]);
@@ -123,14 +123,14 @@ System.err.println("--------");
     /**
      * Parses response then set {@link HttpContext#headers}.
      * (for client)
-     * @param context responses are copied into  
+     * @param context responses are copied into
      */
     private static void parseResponseHeaders(UtilInputStream reader, HttpContext context) throws IOException {
         while (true) {
             String line = reader.readLine();
             if (line == null || line.length() == 0) {
 //Debug.println("may be end of header: " + line);
-                break; 
+                break;
             }
             String[] pair = parseHeader(line);
             context.setHeader(pair[0], pair[1]);
@@ -257,7 +257,7 @@ Debug.println(">>>> " + request.getMethod() + " " + request.getRemoteHost() + ":
             // 2. response
             InputStream is = getFixedInputStream(socket.getInputStream()); // TODO why needs fixed...
 
-            HttpContext response = new HttpContext(); 
+            HttpContext response = new HttpContext();
             response.setRemoteHost(((InetSocketAddress) socket.getRemoteSocketAddress()).getHostName());
             response.setRemotePort(((InetSocketAddress) socket.getRemoteSocketAddress()).getPort());
             response.setLocalHost(((InetSocketAddress) socket.getLocalSocketAddress()).getHostName());
@@ -298,7 +298,7 @@ Debug.println(">>>> " + request.getMethod() + " done");
         // 2. response
         InputStream is = socket.getInputStream();
 
-        HttpContext response = new HttpContext(); 
+        HttpContext response = new HttpContext();
         response.setRemoteHost(((InetSocketAddress) socket.getRemoteSocketAddress()).getHostName());
         response.setRemotePort(((InetSocketAddress) socket.getRemoteSocketAddress()).getPort());
         response.setLocalHost(((InetSocketAddress) socket.getLocalSocketAddress()).getHostName());
@@ -331,7 +331,7 @@ System.out.println("--------");
 
     /**
      * Posts only HTTP header.
-     * (for server) 
+     * (for server)
      */
     public static void postResponse(HttpContext response) throws IOException {
         OutputStream os = response.getOutputStream();
@@ -346,7 +346,7 @@ System.err.println("--------");
     /**
      * Copies context to request.
      * @param request source
-     * @param context destination 
+     * @param context destination
      */
     public static void copy(HttpServletRequest request, HttpContext context) {
         Enumeration<?> e = request.getHeaderNames();

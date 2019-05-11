@@ -14,9 +14,9 @@ import vavi.util.Debug;
 
 
 /**
- * HttpProtocol. 
+ * HttpProtocol.
  *
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 061015 nsano initial version <br>
  */
 public class HttpProtocol implements Protocol {

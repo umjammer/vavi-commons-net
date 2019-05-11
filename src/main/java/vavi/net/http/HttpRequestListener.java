@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * HTTPRequestListener.
  *
  * @author Satoshi Konno
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 12/13/02 first revision.
  */
 public interface HttpRequestListener extends EventListener {

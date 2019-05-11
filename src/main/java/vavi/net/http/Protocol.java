@@ -22,9 +22,9 @@ import java.util.TimeZone;
 
 
 /**
- * Protocol. 
+ * Protocol.
  *
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 061015 nsano initial version <br>
  */
 public interface Protocol {
@@ -186,7 +186,7 @@ e.printStackTrace();
             } else {
                 uri = uri.substring(questionIndex + 1);
             }
-        
+
             StringTokenizer st = new StringTokenizer(uri, "&");
             while (st.hasMoreTokens()) {
                 String pair = st.nextToken();

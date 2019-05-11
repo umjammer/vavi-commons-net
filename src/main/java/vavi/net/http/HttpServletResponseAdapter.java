@@ -27,8 +27,8 @@ import vavi.util.StringUtil;
 
 /**
  * HttpServletResponseAdapter.
- * 
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ *
+ * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 050221 nsano initial version <br>
  */
 public class HttpServletResponseAdapter implements HttpServletResponse {
@@ -288,7 +288,7 @@ Debug.println("name: " + name);
     private ServletOutputStream servletOutputStream;
 
     /**
-     * @return 常に同じインスタンスが返ります。 
+     * @return 常に同じインスタンスが返ります。
      */
     public ServletOutputStream getOutputStream() throws IOException {
         if (usedWriter) {
@@ -322,7 +322,7 @@ Debug.println("name: " + name);
     /* @see javax.servlet.ServletResponse#setCharacterEncoding(java.lang.String) */
     public void setCharacterEncoding(String charset) {
         // TODO Auto-generated method stub
-        
+
     }
 }
 

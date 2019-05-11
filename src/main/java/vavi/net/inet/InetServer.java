@@ -20,7 +20,7 @@ import vavi.util.Debug;
 /**
  * Simple Internet Server.
  *
- * @author <a href=mailto:vavivavi@yahoo.co.jp>nsano</a>
+ * @author <a href=mailto:umjammer@gmail.com>nsano</a>
  * @version 0.00 030314 nsano initial version <br>
  *          0.01 030318 nsano complete <br>
  */
