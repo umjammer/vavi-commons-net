@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 
 import vavi.util.Debug;
 
@@ -103,7 +104,7 @@ Debug.println(t);
             for (Future<?> accepting : acceptingList) {
                 accepting.cancel(false);
             }
-Debug.println("Shutdown");
+Debug.println(Level.FINE, "Shutdown");
         } finally {
             serverSocket.close();
         }

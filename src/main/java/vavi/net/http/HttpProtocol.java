@@ -9,6 +9,7 @@ package vavi.net.http;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 
 import vavi.util.Debug;
 
@@ -56,13 +57,13 @@ public class HttpProtocol implements Protocol {
             throw new IllegalArgumentException("no method");
         }
         context.setMethod(st.nextToken());
-System.err.println(" method: " + context.getMethod());
+Debug.println(Level.FINE, " method: " + context.getMethod());
         if (!st.hasMoreTokens()) {
             throw new IllegalArgumentException("no path");
         }
         String uri = st.nextToken();
         context.setRequestURI(uri);
-System.err.println(" requestURI: " + context.getRequestURI());
+Debug.println(Level.FINE, " requestURI: " + context.getRequestURI());
         Util.parseRequestURI(context.getRequestURI(), context);
         if (!st.hasMoreTokens()) {
             throw new IllegalArgumentException("no protocol");
@@ -77,12 +78,12 @@ System.err.println(" requestURI: " + context.getRequestURI());
                     this.isHttp11 = true;
                 }
             } catch (NumberFormatException e) {
-Debug.println("unknown version: " + protocol.substring(p + 1));
+Debug.println(Level.FINE, "unknown version: " + protocol.substring(p + 1));
             }
             protocol = protocol.substring(0, p); // dummy
         }
         context.setProtocol(this);
-System.err.println(" protocol: " + context.getProtocol().getName() + ", version: " + version + ", " + isHttp11);
+Debug.println(Level.FINE, " protocol: " + context.getProtocol().getName() + ", version: " + version + ", " + isHttp11);
     }
 
     /* */
@@ -93,20 +94,20 @@ System.err.println(" protocol: " + context.getProtocol().getName() + ", version:
         }
         st.nextToken(); // for dummy
         context.setProtocol(this);
-System.err.println("-------- response: " + context.getRemoteHost() + ":" + context.getRemotePort() + " << " + context.getLocalHost() + ":" + context.getLocalPort()/* + ": " + encoding*/);
-System.err.println("response line: " + line);
-System.err.println(" protocol: " + context.getProtocol().getName());
+Debug.println(Level.FINE, "-------- response: " + context.getRemoteHost() + ":" + context.getRemotePort() + " << " + context.getLocalHost() + ":" + context.getLocalPort()/* + ": " + encoding*/);
+Debug.println(Level.FINE, "response line: " + line);
+Debug.println(Level.FINE, " protocol: " + context.getProtocol().getName());
         if (!st.hasMoreTokens()) {
             throw new IllegalArgumentException("no status");
         }
         context.setStatus(Integer.parseInt(st.nextToken()));
-System.err.println(" status: " + context.getStatus());
+Debug.println(Level.FINE, " status: " + context.getStatus());
         String statusMessage = "";
         while (st.hasMoreTokens()) {
             statusMessage += st.nextToken() + " ";
         }
         context.setStatusMessage(statusMessage.trim());
-System.err.println(" statusMessage: " + context.getStatusMessage());
+Debug.println(Level.FINE, " statusMessage: " + context.getStatusMessage());
     }
 
     /** */

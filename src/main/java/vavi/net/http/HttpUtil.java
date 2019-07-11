@@ -17,6 +17,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Enumeration;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,18 +43,18 @@ public final class HttpUtil {
      * (for server)
      * use {@link InputStream#available()}
      * @param context request are copied into
-     * @see HttpContext#setMethod()
+     * @see HttpContext#setMethod(String)
      * @see HttpContext#setRequestURI(String)
-     * @see HttpContext#setProtocol(String)
+     * @see HttpContext#setProtocol(Protocol)
      * @see HttpContext#setInputStream(InputStream)
      */
     public static void parseRequestHeader(InputStream is, HttpContext context) throws IOException {
-System.err.println("-------- request: " + context.getRemoteHost() + ":" + context.getRemotePort() + " >> " + context.getLocalHost() + ":" + context.getLocalPort() + " (" + is.available() + " bytes available)");
+Debug.println(Level.FINE, "-------- request: " + context.getRemoteHost() + ":" + context.getRemotePort() + " >> " + context.getLocalHost() + ":" + context.getLocalPort() + " (" + is.available() + " bytes available)");
 //Debug.println(Debug.getCallerMethod(2));
 //Debug.println("available-1: " + is.available());
         UtilInputStream reader = new UtilInputStream(is);
         String line = reader.readLine();
-System.err.println("request line: " + line);
+Debug.println(Level.FINE, "request line: " + line);
         Protocol protocol = Protocol.Factory.getInstanceByRequestLine(line);
         protocol.parseRequestLine(line, context);
 
@@ -64,7 +65,7 @@ System.err.println("request line: " + line);
 
         // content
         context.setInputStream(is);
-System.err.println("-------- " + is.available() + " bytes left");
+Debug.println(Level.FINE, "-------- " + is.available() + " bytes left");
     }
 
     /** */
@@ -79,7 +80,7 @@ System.err.println("-------- " + is.available() + " bytes left");
      * (for client)
      * don't use {@link InputStream#available()}!
      * @param context responses are copied into
-     * @see HttpContext#setProtocol(String)
+     * @see HttpContext#setProtocol(Protocol)
      * @see HttpContext#setStatus(int)
      * @see HttpContext#setInputStream(InputStream)
      */
@@ -97,7 +98,7 @@ System.err.println("-------- " + is.available() + " bytes left");
         // headers
         parseResponseHeaders(reader, context);
 //Debug.println("available-2: " + is.available());
-System.err.println("--------");
+Debug.println(Level.FINE, "--------");
 
         // content
         context.setInputStream(is);
@@ -158,7 +159,7 @@ System.err.println("--------");
             }
             value = tmp;
             //
-System.err.println("header: " + name + ": " + value);
+Debug.println(Level.FINE, "header: " + name + ": " + value);
             return new String[] { name, value };
         }
     }
@@ -225,7 +226,7 @@ System.err.println("header: " + name + ": " + value);
      *         {@link HttpContext#is} have been set.
      */
     public static HttpContext postRequest(HttpContext request) throws IOException {
-Debug.println(">>>> " + request.getMethod() + " " + request.getRemoteHost() + ":" + request.getRemotePort() + request.getRequestURI());
+Debug.println(Level.FINE, ">>>> " + request.getMethod() + " " + request.getRemoteHost() + ":" + request.getRemotePort() + request.getRequestURI());
         Socket socket = null;
         try {
             socket = new Socket(request.getRemoteHost(), request.getRemotePort());
@@ -268,7 +269,7 @@ Debug.println(">>>> " + request.getMethod() + " " + request.getRemoteHost() + ":
             return response;
         } finally {
             socket.close();
-Debug.println(">>>> " + request.getMethod() + " done");
+Debug.println(Level.FINE, ">>>> " + request.getMethod() + " done");
         }
     }
 
@@ -314,7 +315,7 @@ Debug.println(">>>> " + request.getMethod() + " done");
      * (for client)
      */
     private static InputStream getFixedInputStream(InputStream is) throws IOException {
-Debug.println("available: " + is.available());
+Debug.println(Level.FINE, "available: " + is.available());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         while (true) {
             int c = is.read();
@@ -323,9 +324,9 @@ Debug.println("available: " + is.available());
             }
             baos.write(c);
         }
-System.out.println("-------- response content: " + baos.size() + " bytes");
-System.out.println(new String(baos.toByteArray()));
-System.out.println("--------");
+Debug.println(Level.FINE, "-------- response content: " + baos.size() + " bytes");
+Debug.println(Level.FINE, new String(baos.toByteArray()));
+Debug.println(Level.FINE, "--------");
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
@@ -335,12 +336,12 @@ System.out.println("--------");
      */
     public static void postResponse(HttpContext response) throws IOException {
         OutputStream os = response.getOutputStream();
-System.err.println("-------- response: " + response.getMethod() + ": " + os);
+Debug.println(Level.FINE, "-------- response: " + response.getMethod() + ": " + os);
 //      PrintStream ps = new PrintStream(os);
 //      printResponseHeader(ps, response);
 //      ps.flush();
         os.flush();
-System.err.println("--------");
+Debug.println(Level.FINE, "--------");
     }
 
     /**

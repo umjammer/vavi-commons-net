@@ -15,6 +15,7 @@ import java.net.Socket;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 050821 nsano initial version <br>
  */
+@FunctionalInterface
 public interface SocketHandlerFactory {
 
     /**

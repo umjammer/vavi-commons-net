@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 12/13/02 first revision.
  */
+@FunctionalInterface
 public interface HttpRequestListener extends EventListener {
     /** */
     void doService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;

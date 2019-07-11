@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -85,12 +86,12 @@ public class HttpServer extends InetServer {
     /** 実際のサーバータスク */
     private SocketHandlerFactory socketHandlerFactory = new SocketHandlerFactory() {
         public Runnable getSocketHandler(final Socket socket) {
-Debug.println("<<<< <<<< <<<< <<<< <<<< <<<< <<<< <<<< <<<< ACCEPT: " + socket.getRemoteSocketAddress() + ": " + socket.hashCode());
+Debug.println(Level.FINE, "<<<< <<<< <<<< <<<< <<<< <<<< <<<< <<<< <<<< ACCEPT: " + socket.getRemoteSocketAddress() + ": " + socket.hashCode());
             return new Runnable() {
                 public void run() {
                     InputStream is;
                     OutputStream os = null;
-Debug.println("==== ONE PROCESS START: " + socket.getRemoteSocketAddress() + ": " + socket.hashCode());
+Debug.println(Level.FINE, "==== ONE PROCESS START: " + socket.getRemoteSocketAddress() + ": " + socket.hashCode());
                     try {
                         is = socket.getInputStream();
                         os = socket.getOutputStream();
@@ -124,13 +125,13 @@ Debug.println("==== ONE PROCESS START: " + socket.getRemoteSocketAddress() + ": 
 //                  } catch (IOException e) {
 //                      HttpUtil.printErrorResponse(os, e);
                     } catch (Exception e) {
-Debug.println("==== ERROR RESPONSE: " + e);
+Debug.println(Level.FINE, "==== ERROR RESPONSE: " + e);
                         // TODO response reset
                         HttpUtil.printErrorResponse(os, e);
                     } finally {
                         try {
                             os.flush();
-Debug.println("==== ONE PROCESS DONE: " + socket.getRemoteSocketAddress());
+Debug.println(Level.FINE, "==== ONE PROCESS DONE: " + socket.getRemoteSocketAddress());
                             socket.close();
                         } catch (IOException e) {
                             e.printStackTrace(System.err);
@@ -144,7 +145,7 @@ Debug.println("==== ONE PROCESS DONE: " + socket.getRemoteSocketAddress());
     /** */
     public void start() throws IOException {
         super.start();
-Debug.println("+++ HTTP server: address: " + address + ", port: " + port);
+Debug.println(Level.FINE, "+++ HTTP server: address: " + address + ", port: " + port);
     }
 
     /** */

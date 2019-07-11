@@ -57,7 +57,6 @@ public interface Protocol {
     /**
      * @param ps
      * @param context
-     * @return
      */
     void printResponseLine(PrintStream ps, HttpContext context);
 

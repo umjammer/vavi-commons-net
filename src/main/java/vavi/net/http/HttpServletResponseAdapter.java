@@ -14,8 +14,11 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -162,12 +165,15 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
             return;
         }
         // status, header
-System.err.println("-------- response: ");
-HttpUtil.printResponseHeader(System.err, context);
+Debug.println(Level.FINE, "-------- response: ");
+String rootLevel = LogManager.getLogManager().getProperty(".level");
+if (Arrays.asList("FINE", "FINER", "FINEST").stream().anyMatch(l -> l.equals(rootLevel))) {
+ HttpUtil.printResponseHeader(System.err, context);
+}
         HttpUtil.printResponseHeader(new PrintStream(context.getOutputStream()), context);
         // content
-System.err.println("flushing content length: " + buffer.size() + "\n" + StringUtil.getDump(buffer.toByteArray(), 128));
-System.err.println("-------- response: ");
+Debug.println(Level.FINE, "flushing content length: " + buffer.size() + "\n" + StringUtil.getDump(buffer.toByteArray(), 128));
+Debug.println(Level.FINE, "-------- response: ");
         context.getOutputStream().write(buffer.toByteArray());
         context.getOutputStream().flush();
 //Debug.println("flushing done");
@@ -256,11 +262,11 @@ System.err.println("-------- response: ");
                         encoding = token.substring(p + 1).trim();
                         break;
                     } else {
-Debug.println("name: " + name);
+Debug.println(Level.FINE, "name: " + name);
                     }
                 } else {
                     String name = token.trim().toLowerCase();
-Debug.println("name: " + name);
+Debug.println(Level.FINE, "name: " + name);
                 }
             }
         }
