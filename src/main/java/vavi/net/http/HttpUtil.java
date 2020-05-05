@@ -15,12 +15,22 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.logging.Level;
+import java.util.stream.Stream;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import vavi.io.UtilInputStream;
 import vavi.util.Debug;
@@ -393,6 +403,98 @@ Debug.printStackTrace(ioe);
     /** @return true when statusCode is 2xx */
     public static boolean isStatusCodeSucces(int statusCode) {
         return statusCode / 100 == 2;
+    }
+
+    /** */
+    public static Map<String, String[]> splitQuery(URI uri) throws IOException {
+        final Map<String, String[]> queryPairs = new HashMap<>();
+        final String[] pairs = uri.getQuery().split("&");
+        for (String pair : pairs) {
+            final int idx = pair.indexOf("=");
+            final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
+            final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : null;
+            if (!queryPairs.containsKey(key)) {
+                queryPairs.put(key, new String[] { value });
+            } else {
+                queryPairs.put(key, Stream.concat(Arrays.stream(queryPairs.get(key)), Arrays.stream(new String[] { value })).toArray(String[]::new));
+            }
+        }
+        return queryPairs;
+    }
+
+    /** */
+    public static class DummyHttpSession implements HttpSession {
+        Map<String, Object> attrs = new HashMap<>();
+        Map<String, Object> values = new HashMap<>();
+        String id = UUID.randomUUID().toString();
+        long created = System.currentTimeMillis();
+        @Override
+        public long getCreationTime() {
+            return created;
+        }
+        @Override
+        public String getId() {
+            return id;
+        }
+        @Override
+        public long getLastAccessedTime() {
+            return created;
+        }
+        @Override
+        public ServletContext getServletContext() {
+            return null;
+        }
+        @Override
+        public void setMaxInactiveInterval(int interval) {
+        }
+        @Override
+        public int getMaxInactiveInterval() {
+            return 0;
+        }
+        @SuppressWarnings("deprecation")
+        @Override
+        public javax.servlet.http.HttpSessionContext getSessionContext() {
+            return null;
+        }
+        @Override
+        public Object getAttribute(String name) {
+            return attrs.get(name);
+        }
+        @Override
+        public Object getValue(String name) {
+            return values.get(name);
+        }
+        @Override
+        public Enumeration<String> getAttributeNames() {
+            return Collections.enumeration(attrs.keySet());
+        }
+        @Override
+        public String[] getValueNames() {
+            return values.keySet().toArray(new String[values.size()]);
+        }
+        @Override
+        public void setAttribute(String name, Object value) {
+            attrs.put(name, value);
+        }
+        @Override
+        public void putValue(String name, Object value) {
+            values.put(name, value);
+        }
+        @Override
+        public void removeAttribute(String name) {
+            attrs.remove(name);
+        }
+        @Override
+        public void removeValue(String name) {
+            values.remove(name);
+        }
+        @Override
+        public void invalidate() {
+        }
+        @Override
+        public boolean isNew() {
+            return false;
+        }
     }
 }
 
