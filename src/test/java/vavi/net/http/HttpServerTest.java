@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+
 /**
  * HttpServerTest.
  *
@@ -46,7 +47,6 @@ class HttpServerTest {
         conn.getContent();
         server.stop();
     }
-
 }
 
 /* */
