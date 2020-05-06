@@ -408,15 +408,17 @@ Debug.printStackTrace(ioe);
     /** */
     public static Map<String, String[]> splitQuery(URI uri) throws IOException {
         final Map<String, String[]> queryPairs = new HashMap<>();
-        final String[] pairs = uri.getQuery().split("&");
-        for (String pair : pairs) {
-            final int idx = pair.indexOf("=");
-            final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
-            final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : null;
-            if (!queryPairs.containsKey(key)) {
-                queryPairs.put(key, new String[] { value });
-            } else {
-                queryPairs.put(key, Stream.concat(Arrays.stream(queryPairs.get(key)), Arrays.stream(new String[] { value })).toArray(String[]::new));
+        if (uri.getQuery() != null) {
+            final String[] pairs = uri.getQuery().split("&");
+            for (String pair : pairs) {
+                final int idx = pair.indexOf("=");
+                final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
+                final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : null;
+                if (!queryPairs.containsKey(key)) {
+                    queryPairs.put(key, new String[] { value });
+                } else {
+                    queryPairs.put(key, Stream.concat(Arrays.stream(queryPairs.get(key)), Arrays.stream(new String[] { value })).toArray(String[]::new));
+                }
             }
         }
         return queryPairs;
