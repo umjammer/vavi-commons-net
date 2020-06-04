@@ -94,7 +94,6 @@ Debug.println(Level.FINE, "-------- " + is.available() + " bytes left");
      * @see HttpContext#setStatus(int)
      * @see HttpContext#setInputStream(InputStream)
      */
-    @SuppressWarnings("resource")
     public static void parseResponseHeader(InputStream is, HttpContext context) throws IOException {
         UtilInputStream reader = new UtilInputStream(is, defaultEncoding);
 //Debug.println("available-1: " + is.available());
