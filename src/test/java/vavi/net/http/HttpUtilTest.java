@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 /**
@@ -26,16 +27,49 @@ class HttpUtilTest {
     void test() throws Exception {
         URI uri = URI.create("https://example.com?id=aaa&second=2#sharp");
         Map<String, String[]> params = HttpUtil.splitQuery(uri);
-        assertEquals(params.get("id")[0], "aaa");
-        assertEquals(params.get("second")[0], "2");
+        assertEquals("aaa", params.get("id")[0]);
+        assertEquals("2", params.get("second")[0]);
 
         uri = URI.create("https://example.com");
         params = HttpUtil.splitQuery(uri);
-        assertEquals(params.get("id"), null);
+        assertEquals(null, params.get("id"));
 
         uri = URI.create("https://example.com?id=aaa&id=bbb");
         params = HttpUtil.splitQuery(uri);
-        assertEquals(params.get("id")[1], "bbb");
+        assertEquals("bbb", params.get("id")[1]);
+    }
+
+    @Test
+    public void testParamsMap() throws Exception {
+        URI uri = URI.create("scheme:///?id=test");
+
+        Map<String, String[]> params = HttpUtil.splitQuery(uri);
+        assertEquals("test", params.get("id")[0]);
+    }
+
+    @Test
+    public void testParamsMapWithoutValue() throws Exception {
+        URI uri = URI.create("scheme:///?id=");
+
+        Map<String, String[]> params = HttpUtil.splitQuery(uri);
+        assertNull(params.get("id")[0]);
+    }
+
+    @Test
+    public void testNoQueryParamsMap() throws Exception {
+        URI uri = URI.create("scheme:///");
+
+        Map<String, String[]> params = HttpUtil.splitQuery(uri);
+        assertNull(params.get("id"));
+    }
+
+    @Test
+    public void testParamsMapWithSharp() throws Exception {
+        URI uri = URI.create("scheme:///?id=test&second=2#sharp");
+
+        Map<String, String[]> params = HttpUtil.splitQuery(uri);
+        assertEquals("test", params.get("id")[0]);
+        assertEquals("2", params.get("second")[0]);
     }
 }
 
