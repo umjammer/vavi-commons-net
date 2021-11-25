@@ -40,7 +40,7 @@ public class HttpProtocol implements Protocol {
         return "HTTP";
     }
 
-    /* TODO もっと厳密に "-" 含めてるよ */
+    /* TODO should be more restricted, including "-" */
     public boolean matchesRequestLine(String line) {
         return line.matches("([\\w-]+)\\s+(\\S+)\\s+(HTTP\\/\\d\\.\\d)\\s*");
     }

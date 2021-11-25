@@ -44,63 +44,64 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
         this.context = context;
     }
 
-    /** */
+    @Override
     public void sendError(int error) throws IOException {
         context.setStatus(error);
     }
 
-    /** */
+    @Override
     public void setStatus(int status) {
         context.setStatus(status);
     }
 
-    /** */
+    @Override
     public void sendError(int error, String message) throws IOException {
         context.setStatus(error);
         context.setStatusMessage(message);
     }
 
-    /** */
+    @Override
     public void setStatus(int status, String message) {
     }
 
-    /** */
+    @Override
     public void sendRedirect(String url) throws IOException {
         context.setStatus(SC_MOVED_PERMANENTLY);
         context.setStatusMessage(url); // TODO correction
     }
 
-    /** */
+    @Override
     public boolean containsHeader(String name) {
         return context.headers.containsKey(name);
     }
 
-    /** */
+    @Override
     public void addIntHeader(String name, int value) {
         context.setHeader(name, String.valueOf(value));
     }
 
-    /** */
+    @Override
     public void setIntHeader(String name, int value) {
         context.setHeader(name, String.valueOf(value));
     }
 
-    /** */
+    @Override
     public void addDateHeader(String name, long value) {
         context.setHeader(name, Protocol.Util.toDateString(value));
     }
 
-    /** */
+    @Override
     public void setDateHeader(String name, long value) {
         context.setHeader(name, Protocol.Util.toDateString(value));
     }
 
-    /** */
+    @Override
     public void addCookie(Cookie cookie) {
         setHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue());
     }
 
-    /** TODO check */
+    // TODO check
+    @Override
     public String encodeRedirectURL(String url) {
         try {
             return URLEncoder.encode(url, encoding);
@@ -109,12 +110,13 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
         }
     }
 
-    /** */
+    @Override
     public String encodeRedirectUrl(String url) {
         return url;
     }
 
-    /** TODO check */
+    // TODO
+    @Override
     public String encodeURL(String url) {
         try {
             return URLEncoder.encode(url, encoding);
@@ -123,17 +125,17 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
         }
     }
 
-    /** */
+    @Override
     public String encodeUrl(String url) {
         return url;
     }
 
-    /** */
+    @Override
     public void addHeader(String name, String value) {
         context.setHeader(name, value);
     }
 
-    /** */
+    @Override
     public void setHeader(String name, String value) {
         context.setHeader(name, value);
     }
@@ -141,7 +143,8 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
     /** */
     private ByteArrayOutputStream buffer = new ByteArrayOutputStream(8192);
 
-    /** TODO when no buffering */
+    // TODO when no buffering
+    @Override
     public int getBufferSize() {
         return buffer.size();
     }
@@ -152,7 +155,8 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
     /** */
     private boolean nowFlushing = false;
 
-    /** TODO buffer を使用しない場合 */
+    // TODO w/o buffer
+    @Override
     public void flushBuffer() throws IOException {
 //new Exception("*** DUMMY ***").printStackTrace();
         if (nowFlushing) {
@@ -182,7 +186,7 @@ Debug.println(Level.FINE, "-------- response: ");
         nowFlushing = false;
     }
 
-    /** */
+    @Override
     public void reset() {
         if (committed) {
             throw new IllegalStateException("already committed");
@@ -191,7 +195,7 @@ Debug.println(Level.FINE, "-------- response: ");
         resetBuffer();
     }
 
-    /** */
+    @Override
     public void resetBuffer() {
         if (committed) {
             throw new IllegalStateException("already committed");
@@ -200,20 +204,20 @@ Debug.println(Level.FINE, "-------- response: ");
         committed = false;
     }
 
-    /** */
+    @Override
     public boolean isCommitted() {
 //Debug.println("IS COMMITED: " + committed);
         return committed;
     }
 
-    /** */
+    @Override
     public void setBufferSize(int size) {
         if (committed) {
             throw new IllegalStateException("already committed");
         }
     }
 
-    /** */
+    @Override
     public void setContentLength(int length) {
         context.setHeader("content-length", String.valueOf(length));
     }
@@ -224,7 +228,7 @@ Debug.println(Level.FINE, "-------- response: ");
     /** */
     private PrintWriter printWriter;
 
-    /** */
+    @Override
     public PrintWriter getWriter() throws IOException {
         if (usedOutputStream) {
             throw new IllegalStateException("#getOutputStream() already called.");
@@ -239,17 +243,17 @@ Debug.println(Level.FINE, "-------- response: ");
     /** */
     private String encoding = "ISO-8859-1";
 
-    /** */
+    @Override
     public String getCharacterEncoding() {
         return encoding;
     }
 
-    /** */
+    @Override
     public String getContentType() {
         return context.getHeader("content-type");
     }
 
-    /** */
+    @Override
     public void setContentType(String type) {
         if (!usedWriter) {
             StringTokenizer st = new StringTokenizer(type, "; ");
@@ -276,12 +280,12 @@ Debug.println(Level.FINE, "name: " + name);
     /** */
     private Locale locale;
 
-    /** */
+    @Override
     public Locale getLocale() {
         return locale;
     }
 
-    /** */
+    @Override
     public void setLocale(Locale locale) {
         // TODO set content-type
         this.locale = locale;
@@ -294,8 +298,9 @@ Debug.println(Level.FINE, "name: " + name);
     private ServletOutputStream servletOutputStream;
 
     /**
-     * @return 常に同じインスタンスが返ります。
+     * @return returns the same instance always
      */
+    @Override
     public ServletOutputStream getOutputStream() throws IOException {
         if (usedWriter) {
             throw new IllegalStateException("#getWriter() already called.");
@@ -310,8 +315,8 @@ Debug.println(Level.FINE, "name: " + name);
                         buffer.write(b);
                     }
                     public void flush() throws IOException {
-                        // TODO 要リファクタ
-                        // 親インスタンスを使用してるから汚くなってる
+                        // TODO need to refactor
+                        // it's dirty because using parent class instance
                         flushBuffer();
                     }
                 };
@@ -325,10 +330,9 @@ Debug.println(Level.FINE, "name: " + name);
         context.setOutputStream(outputStream);
     }
 
-    /* @see javax.servlet.ServletResponse#setCharacterEncoding(java.lang.String) */
+    @Override
     public void setCharacterEncoding(String charset) {
         // TODO Auto-generated method stub
-
     }
 }
 
