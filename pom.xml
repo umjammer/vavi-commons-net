@@ -15,22 +15,7 @@
     <name></name>
   </organization>
   <url>https://github.com/umjammer/vavi-commons-net/</url>
-  <description>1.0.6
-
-    bug fix: got null when query is none
-
-1.0.5
-
-    add http utilities
-
-1.0.4
-
-    clean up logging
-
-1.0.1
- 
-    update dependent libraries version
-    make HttpServer as the sub class of InetServer</description>
+  <description></description>
   <scm>
     <url>https://github.com/umjammer/vavi-commons-net</url>
   </scm>
@@ -63,11 +48,23 @@
     </repository>
   </repositories>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.8.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.1.2</version>
+      <version>1.1.5</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -78,19 +75,16 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-commons</artifactId>
-      <version>1.5.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
