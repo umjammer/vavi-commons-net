@@ -27,20 +27,19 @@ import vavi.util.Debug;
  */
 public class InetServer {
 
-    /** サーバーソケット */
+    /** server socket */
     private ServerSocket serverSocket;
-    /** サーバー */
+    /** server */
     private final ExecutorService server;
-    /** スレッドプール */
+    /** thread pool */
     private final ExecutorService pool;
     /** */
     protected int port;
 
     /**
-     * 指定したポート番号でサーバーを起動します。
-     * 実際行いたいことは {@link #setSocketHandlerFactory(SocketHandlerFactory)}
-     * を使用して登録してください。
-     * @param port サーバーのポート番号
+     * Starts a server using specified port number.
+     * Register what you want to do using {@link #setSocketHandlerFactory(SocketHandlerFactory)}.
+     * @param port port number of the server
      */
     public InetServer(int port) {
         this.port = port;
@@ -48,9 +47,9 @@ public class InetServer {
         server = Executors.newSingleThreadExecutor();
     }
 
-    /** 接続を待つスレッド用のタスク */
+    /** the task waiting for a connection */
     private Runnable serverTask = new Runnable() {
-        /** 接続を待ちイベントをリスナに対して発行します。 */
+        /** waiting for a connection, and fire an event to the listener */
         public void run() {
             while (true) {
                 try {
@@ -59,7 +58,7 @@ public class InetServer {
                     if (!isRunning()) {
                         break;
                     }
-                    // Throwable で終了しません
+                    // not terminate by Throwable
 Debug.println(t);
                     try { Thread.sleep(100); } catch (InterruptedException e) {}
                 }
@@ -68,7 +67,7 @@ Debug.println(t);
     };
 
     /**
-     * 接続ごとに起動するハンドラクラスを作成するファクトリクラスです。
+     * The factory class that executes for each connection.
      * @see #setSocketHandlerFactory(SocketHandlerFactory)
      */
     private SocketHandlerFactory socketHandlerFactory;
@@ -87,7 +86,7 @@ Debug.println(t);
     private List<Future<?>> acceptingList = new ArrayList<>();
 
     /**
-     * サーバースレッドを開始します。
+     * Starts a server thread.
      */
     public void start() throws IOException {
         serverSocket = new ServerSocket(port);
@@ -96,7 +95,7 @@ Debug.println(t);
     }
 
     /**
-     * サーバースレッドを停止します。
+     * Stops a server thread.
      */
     public void stop() throws IOException {
         try {

@@ -18,33 +18,33 @@ import java.io.PrintStream;
  */
 public class DefaultProtocol implements Protocol {
 
-    /* */
+    @Override
     public String getName() {
         return "UNKNOWN";
     }
 
-    /* */
+    @Override
     public boolean matchesRequestLine(String line) {
         return false;
     }
 
-    /* */
+    @Override
     public boolean matchesResponseLine(String line) {
         return false;
     }
 
-    /* */
+    @Override
     public void parseRequestLine(String line, HttpContext context) throws IOException {
         context.setProtocol(this);
         context.setRequestURI("");
         context.setMethod("");
     }
 
-    /* */
+    @Override
     public void parseResponseLine(String line, HttpContext context) throws IOException {
     }
 
-    /* */
+    @Override
     public void printResponseLine(PrintStream ps, HttpContext context) {
         ps.print(getName());
         ps.print(' ');
@@ -54,7 +54,7 @@ public class DefaultProtocol implements Protocol {
         ps.print(context.getStatusMessage());
     }
 
-    /* */
+    @Override
     public void printRequestLine(PrintStream ps, HttpContext context) {
         ps.print(context.getMethod());
         ps.print(' ');
@@ -62,10 +62,12 @@ public class DefaultProtocol implements Protocol {
     }
 
     /* for server */
+    @Override
     public void parseRequestHeaders(HttpContext context) {
     }
 
     /* for client */
+    @Override
     public void addRequestHeaders(HttpContext context) {
     }
 }
