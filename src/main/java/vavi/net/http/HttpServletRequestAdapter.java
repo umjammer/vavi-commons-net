@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -21,11 +22,22 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.ReadListener;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConnection;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpUpgradeHandler;
+import jakarta.servlet.http.Part;
 
 
 /**
@@ -57,8 +69,33 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     @Override
-    public boolean isRequestedSessionIdFromUrl() {
+    public boolean authenticate(HttpServletResponse httpServletResponse) throws IOException, ServletException {
         return false;
+    }
+
+    @Override
+    public void login(String s, String s1) throws ServletException {
+
+    }
+
+    @Override
+    public void logout() throws ServletException {
+
+    }
+
+    @Override
+    public Collection<Part> getParts() throws IOException, ServletException {
+        return null;
+    }
+
+    @Override
+    public Part getPart(String s) throws IOException, ServletException {
+        return null;
+    }
+
+    @Override
+    public <T extends HttpUpgradeHandler> T upgrade(Class<T> aClass) throws IOException, ServletException {
+        return null;
     }
 
     // TODO
@@ -154,9 +191,8 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     @Override
-    public Enumeration<?> getHeaderNames() {
-        Hashtable<String, String> hashtable = new Hashtable<>();
-        hashtable.putAll(context.getHeaders());
+    public Enumeration<String> getHeaderNames() {
+        Hashtable<String, String> hashtable = new Hashtable<>(context.getHeaders());
         return hashtable.keys();
     }
 
@@ -194,6 +230,11 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
         return null;
     }
 
+    @Override
+    public String changeSessionId() {
+        return null;
+    }
+
     // TODO
     @Override
     public HttpSession getSession(boolean arg0) {
@@ -207,13 +248,18 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
 
     // TODO
     @Override
-    public Enumeration<?> getHeaders(String name) {
+    public Enumeration<String> getHeaders(String name) {
         return null;
     }
 
     @Override
     public int getContentLength() {
         return getIntHeader("content-length");
+    }
+
+    @Override
+    public long getContentLengthLong() {
+        return 0;
     }
 
     @Override
@@ -284,23 +330,21 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     @Override
-    public Enumeration<?> getAttributeNames() {
-        Hashtable<String, Object> hashtable = new Hashtable<>();
-        hashtable.putAll(attributes);
+    public Enumeration<String> getAttributeNames() {
+        Hashtable<String, Object> hashtable = new Hashtable<>(attributes);
         return hashtable.keys();
     }
 
     // TODO
     @Override
-    public Enumeration<?> getLocales() {
+    public Enumeration<Locale> getLocales() {
         return null;
     }
 
     @Override
-    public Enumeration<?> getParameterNames() {
-        Hashtable<String, String[]> hashtable = new Hashtable<>();
-        hashtable.putAll(context.getParameters());
-        return hashtable.elements();
+    public Enumeration<String> getParameterNames() {
+        Hashtable<String, String[]> hashtable = new Hashtable<>(context.getParameters());
+        return hashtable.keys();
     }
 
     // TODO
@@ -310,7 +354,7 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     @Override
-    public Map<?, ?> getParameterMap() {
+    public Map<String, String[]> getParameterMap() {
         return context.parameters;
     }
 
@@ -328,6 +372,25 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
                 servletInputStream = (ServletInputStream) context.getInputStream();
             } else {
                 servletInputStream = new ServletInputStream() {
+                    @Override
+                    public boolean isFinished() {
+                        try {
+                            return available() != 0;
+                        } catch (IOException e) {
+                            return false;
+                        }
+                    }
+
+                    @Override
+                    public boolean isReady() {
+                        return true; // TODO
+                    }
+
+                    @Override
+                    public void setReadListener(ReadListener readListener) {
+                        // TODO
+                    }
+
                     InputStream is;
                     {
                         this.is = context.getInputStream();
@@ -347,7 +410,7 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     /** */
-    private Map<String, Object> attributes = new HashMap<>();
+    private final Map<String, Object> attributes = new HashMap<>();
 
     @Override
     public Object getAttribute(String name) {
@@ -363,11 +426,6 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     public String getParameter(String name) {
         String[] values = context.getParameters().get(name);
         return values != null ? values[0] : null;
-    }
-
-    @Override
-    public String getRealPath(String path) {
-        return null;
     }
 
     @Override
@@ -400,10 +458,58 @@ public class HttpServletRequestAdapter implements HttpServletRequest {
     }
 
     @Override
+    public ServletContext getServletContext() {
+        return null;
+    }
+
+    @Override
+    public AsyncContext startAsync() throws IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public boolean isAsyncStarted() {
+        return false;
+    }
+
+    @Override
+    public boolean isAsyncSupported() {
+        return false;
+    }
+
+    @Override
+    public AsyncContext getAsyncContext() {
+        return null;
+    }
+
+    @Override
+    public DispatcherType getDispatcherType() {
+        return null;
+    }
+
+    @Override
+    public String getRequestId() {
+        return null;
+    }
+
+    @Override
+    public String getProtocolRequestId() {
+        return null;
+    }
+
+    @Override
+    public ServletConnection getServletConnection() {
+        return null;
+    }
+
+    @Override
     public int getRemotePort() {
         // TODO Auto-generated method stub
         return 0;
     }
 }
-
-/* */

@@ -15,14 +15,16 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import vavi.util.Debug;
 import vavi.util.StringUtil;
@@ -55,13 +57,29 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
     }
 
     @Override
-    public void sendError(int error, String message) throws IOException {
-        context.setStatus(error);
-        context.setStatusMessage(message);
+    public int getStatus() {
+        return context.getStatus();
     }
 
     @Override
-    public void setStatus(int status, String message) {
+    public String getHeader(String s) {
+        return null;
+    }
+
+    @Override
+    public Collection<String> getHeaders(String s) {
+        return null;
+    }
+
+    @Override
+    public Collection<String> getHeaderNames() {
+        return null;
+    }
+
+    @Override
+    public void sendError(int error, String message) throws IOException {
+        context.setStatus(error);
+        context.setStatusMessage(message);
     }
 
     @Override
@@ -110,11 +128,6 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
         }
     }
 
-    @Override
-    public String encodeRedirectUrl(String url) {
-        return url;
-    }
-
     // TODO
     @Override
     public String encodeURL(String url) {
@@ -123,11 +136,6 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
         } catch (UnsupportedEncodingException e) {
             return url;
         }
-    }
-
-    @Override
-    public String encodeUrl(String url) {
-        return url;
     }
 
     @Override
@@ -222,6 +230,11 @@ Debug.println(Level.FINE, "-------- response: ");
         context.setHeader("content-length", String.valueOf(length));
     }
 
+    @Override
+    public void setContentLengthLong(long l) {
+
+    }
+
     /** */
     private boolean usedWriter = false;
 
@@ -311,6 +324,16 @@ Debug.println(Level.FINE, "name: " + name);
                 servletOutputStream = (ServletOutputStream) context.getOutputStream();
             } else {
                 servletOutputStream = new ServletOutputStream() {
+                    @Override
+                    public boolean isReady() {
+                        return true; // TODO
+                    }
+
+                    @Override
+                    public void setWriteListener(WriteListener writeListener) {
+                        // TODO
+                    }
+
                     public void write(int b) throws IOException {
                         buffer.write(b);
                     }

@@ -17,6 +17,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -27,10 +28,10 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import vavi.io.UtilInputStream;
 import vavi.util.Debug;
@@ -45,7 +46,7 @@ import vavi.util.Debug;
 public final class HttpUtil {
 
     /** */
-    private static final String defaultEncoding = "ISO-8859-1";
+    private static final String defaultEncoding = StandardCharsets.ISO_8859_1.name();
 
     //----
 
@@ -121,7 +122,7 @@ Debug.println(Level.FINE, "--------");
     private static void parseRequestHeaders(UtilInputStream reader, HttpContext context) throws IOException {
         while (reader.available() > 0) {
             String line = reader.readLine();
-            if (line == null || line.length() == 0) {
+            if (line == null || line.isEmpty()) {
 //Debug.println("may be end of header: " + line);
                 break;
             }
@@ -138,7 +139,7 @@ Debug.println(Level.FINE, "--------");
     private static void parseResponseHeaders(UtilInputStream reader, HttpContext context) throws IOException {
         while (true) {
             String line = reader.readLine();
-            if (line == null || line.length() == 0) {
+            if (line == null || line.isEmpty()) {
 //Debug.println("may be end of header: " + line);
                 break;
             }
@@ -162,7 +163,7 @@ Debug.println(Level.FINE, "--------");
             // TODO special for japanese
             byte[] valueBytes = value.getBytes(defaultEncoding);
 //System.err.println("header: " + name + ":\n" + StringUtil.getDump(valueBytes));
-            String tmp = new String(valueBytes, "UTF-8");
+            String tmp = new String(valueBytes, StandardCharsets.UTF_8);
             if (tmp.indexOf('?') >= 0) {
                 tmp = new String(valueBytes, encoding);
             }
@@ -236,9 +237,7 @@ Debug.println(Level.FINE, "header: " + name + ": " + value);
      */
     public static HttpContext postRequest(HttpContext request) throws IOException {
 Debug.println(Level.FINE, ">>>> " + request.getMethod() + " " + request.getRemoteHost() + ":" + request.getRemotePort() + request.getRequestURI());
-        Socket socket = null;
-        try {
-            socket = new Socket(request.getRemoteHost(), request.getRemotePort());
+        try (Socket socket = new Socket(request.getRemoteHost(), request.getRemotePort())) {
 
             // 1. request
             OutputStream os = socket.getOutputStream();
@@ -277,7 +276,6 @@ Debug.println(Level.FINE, ">>>> " + request.getMethod() + " " + request.getRemot
 
             return response;
         } finally {
-            socket.close();
 Debug.println(Level.FINE, ">>>> " + request.getMethod() + " done");
         }
     }
@@ -334,7 +332,7 @@ Debug.println(Level.FINE, "available: " + is.available());
             baos.write(c);
         }
 Debug.println(Level.FINE, "-------- response content: " + baos.size() + " bytes");
-Debug.println(Level.FINE, new String(baos.toByteArray()));
+Debug.println(Level.FINE, baos.toString());
 Debug.println(Level.FINE, "--------");
         return new ByteArrayInputStream(baos.toByteArray());
     }
@@ -411,8 +409,8 @@ Debug.printStackTrace(ioe);
             final String[] pairs = uri.getQuery().split("&");
             for (String pair : pairs) {
                 final int idx = pair.indexOf("=");
-                final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
-                final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : null;
+                final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), StandardCharsets.UTF_8) : pair;
+                final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), StandardCharsets.UTF_8) : null;
                 if (!queryPairs.containsKey(key)) {
                     queryPairs.put(key, new String[] { value });
                 } else {
@@ -452,42 +450,21 @@ Debug.printStackTrace(ioe);
         public int getMaxInactiveInterval() {
             return 0;
         }
-        @SuppressWarnings("deprecation")
-        @Override
-        public javax.servlet.http.HttpSessionContext getSessionContext() {
-            return null;
-        }
         @Override
         public Object getAttribute(String name) {
             return attrs.get(name);
-        }
-        @Override
-        public Object getValue(String name) {
-            return values.get(name);
         }
         @Override
         public Enumeration<String> getAttributeNames() {
             return Collections.enumeration(attrs.keySet());
         }
         @Override
-        public String[] getValueNames() {
-            return values.keySet().toArray(new String[values.size()]);
-        }
-        @Override
         public void setAttribute(String name, Object value) {
             attrs.put(name, value);
         }
         @Override
-        public void putValue(String name, Object value) {
-            values.put(name, value);
-        }
-        @Override
         public void removeAttribute(String name) {
             attrs.remove(name);
-        }
-        @Override
-        public void removeValue(String name) {
-            values.remove(name);
         }
         @Override
         public void invalidate() {
