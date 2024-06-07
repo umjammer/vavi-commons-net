@@ -74,5 +74,3 @@ System.err.println("start2");
         server.stop();
     }
 }
-
-/* */

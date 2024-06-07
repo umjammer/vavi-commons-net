@@ -72,5 +72,3 @@ class HttpUtilTest {
         assertEquals("2", params.get("second")[0]);
     }
 }
-
-/* */
