@@ -149,5 +149,3 @@ Debug.println(Level.FINE, "+++ HTTP server: address: " + address + ", port: " + 
         super.stop();
     }
 }
-
-/* */

@@ -89,6 +89,11 @@ public class HttpServletResponseAdapter implements HttpServletResponse {
     }
 
     @Override
+    public void sendRedirect(String location, int sc, boolean clearBuffe) throws IOException {
+
+    }
+
+    @Override
     public boolean containsHeader(String name) {
         return context.headers.containsKey(name);
     }
@@ -358,5 +363,3 @@ Debug.println(Level.FINE, "name: " + name);
         // TODO Auto-generated method stub
     }
 }
-
-/* */

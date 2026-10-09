@@ -23,5 +23,3 @@ public interface SocketHandlerFactory {
      */
     public Runnable getSocketHandler(Socket socket);
 }
-
-/* */

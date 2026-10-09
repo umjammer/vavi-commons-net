@@ -48,7 +48,7 @@ public class InetServer {
     }
 
     /** the task waiting for a connection */
-    private Runnable serverTask = new Runnable() {
+    private final Runnable serverTask = new Runnable() {
         /** waiting for a connection, and fire an event to the listener */
         public void run() {
             while (true) {
@@ -60,7 +60,7 @@ public class InetServer {
                     }
                     // not terminate by Throwable
 Debug.println(t);
-                    try { Thread.sleep(100); } catch (InterruptedException e) {}
+                    try { Thread.sleep(100); } catch (InterruptedException ignored) {}
                 }
             }
         }
@@ -83,7 +83,7 @@ Debug.println(t);
     private Future<?> serving;
 
     /** */
-    private List<Future<?>> acceptingList = new ArrayList<>();
+    private final List<Future<?>> acceptingList = new ArrayList<>();
 
     /**
      * Starts a server thread.
@@ -114,5 +114,3 @@ Debug.println(Level.FINE, "Shutdown");
         return !serving.isCancelled();
     }
 }
-
-/* */

@@ -29,5 +29,3 @@ public interface HttpRequestListener extends EventListener {
     /** */
     void doService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 }
-
-/* */

@@ -71,5 +71,3 @@ public class DefaultProtocol implements Protocol {
     public void addRequestHeaders(HttpContext context) {
     }
 }
-
-/* */
